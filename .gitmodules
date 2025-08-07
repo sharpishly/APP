@@ -1,3 +1,6 @@
 [submodule "python_project"]
 	path = python_project
 	url = git@github.com:sharpishly/DOCKER_PYTHON_SETUP.git
+[submodule "node_project"]
+	path = node_project
+	url = git@github.com:sharpishly/DOCKER_NODEJS_SETUP.git
