@@ -1,6 +1,6 @@
 ### READ ME ###
 
-* Clone with Submodules
+# Clone with Submodules
 
 The easiest way is to use the --recurse-submodules flag when cloning. This command handles everything in one go.
 
@@ -9,7 +9,7 @@ git clone --recurse-submodules git@github.com:sharpishly/app.git
 
 ```
 
-Start Docker
+# Start Docker
 
 ```
 
@@ -37,7 +37,7 @@ docker-compose --version
 
 ```
 
-Docker Logs
+# Docker Logs
 
 ```
 docker logs sharpishly_prod
@@ -48,5 +48,16 @@ docker logs python_app
 docker logs python_nginx
 docker logs node_app
 docker logs node_nginx
+
+```
+
+# Connectivity
+
+```
+
+curl http://localhost
+curl http://localhost:8080
+curl http://localhost:1000
+curl http://localhost:2000
 
 ```

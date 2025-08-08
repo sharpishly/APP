@@ -1,10 +1,10 @@
 name: Deploy to DigitalOcean Droplet
 
-# This workflow runs on a push to the 'main' branch
+# This workflow runs on a push to the 'master' branch
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -30,7 +30,7 @@ jobs:
             # Make safe before pulling new code
             git stash
 
-            # Git pull main repository and submodules
+            # Git pull master repository and submodules
             git pull --recursive modules
 
             # Allow acces through firewall
@@ -53,6 +53,8 @@ jobs:
             chown -R www-data:www-data /var/www/app/node_project
             chmod -R 755 /var/www/app/letsencrypt
             chown -R root:root /var/www/app/letsencrypt
+
+            # Testing GitHub actions
 
             # Stop docker
             docker-compose down
