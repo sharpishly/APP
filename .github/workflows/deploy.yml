@@ -1,27 +1,16 @@
-name: Deploy to DigitalOcean Droplet
-
-# This workflow runs on a push to the 'master' branch
-on:
-  push:
-    branches:
-      - master
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Step 2: Deploy to DigitalOcean Droplet via SSH
-      - name: Deploy with SSH and pull latest code
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            # Navigate to the correct directory
-            cd /var/www/app
+script: |
+            # Confirm a successful SSH connection
+            echo "SSH connection established."
             
+            # Check if the directory exists and the user has access
+            if [ -d "/var/www/app" ]; then
+              echo "Directory /var/www/app exists."
+              cd /var/www/app
+              echo "Successfully navigated to application directory."
+            else
+              echo "ERROR: Directory /var/www/app does not exist or is inaccessible."
+              exit 1
+            fi
+            
+            # Placeholder for your next commands
+            echo "Script finished. Add your next commands here."
