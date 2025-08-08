@@ -33,6 +33,13 @@ jobs:
             # Git pull command by it's self
             git pull origin master
 
+            # Move into submodule folder and pull latest changes
+            cd python_project
+            # or main, depending on the branch
+            git checkout master
+            git pull origin master
+            cd ..
+
             # Git pull master repository and submodules
             git submodule update --init --recursive
 
