@@ -22,7 +22,7 @@ services:
       retries: 3
     depends_on:
       - php_fpm
-      - python_app
+      # - python_app
     command: >
       /bin/sh -c "
         chmod -R 755 /var/www/html/sharpishly &&
