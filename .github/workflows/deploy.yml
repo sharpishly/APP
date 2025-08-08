@@ -30,6 +30,9 @@ jobs:
             # Make safe before pulling new code
             git stash
 
+            # Git pull command by it's self
+            git pull origin master
+
             # Git pull master repository and submodules
             git pull --recursive modules
 

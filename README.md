@@ -9,6 +9,14 @@ git clone --recurse-submodules git@github.com:sharpishly/app.git
 
 ```
 
+# Git pull
+
+```
+git pull origin master
+
+```
+
+
 # Start Docker
 
 ```
