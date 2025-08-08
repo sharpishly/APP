@@ -25,3 +25,39 @@ jobs:
             # Navigate to the correct directory
             cd /var/www/app
             
+            # Run the deployment commands provided by the user
+
+            # Make safe before pulling new code
+            git stash
+
+            # Git pull master repository and submodules
+            git pull --recursive modules
+
+            # Allow acces through firewall
+            sudo ufw allow 80
+            sudo ufw allow 443
+            sudo ufw allow 8080
+            sudo ufw allow 8443
+            sudo ufw allow 1000
+            sudo ufw allow 2000
+            sudo ufw status
+
+            # Set File and folder permissions
+            chmod -R 755 /var/www/app/sharpishly.com/website/public
+            chmod -R 755 /var/www/app/dev.sharpishly.com/website/public
+            chown -R www-data:www-data /var/www/app/sharpishly.com/website/public
+            chown -R www-data:www-data /var/www/app/dev.sharpishly.com/website/public
+            chmod -R 755 /var/www/app/python_project
+            chown -R www-data:www-data /var/www/app/python_project
+            chmod -R 755 /var/www/app/node_project
+            chown -R www-data:www-data /var/www/app/node_project
+            chmod -R 755 /var/www/app/letsencrypt
+            chown -R root:root /var/www/app/letsencrypt
+
+            # Testing GitHub actions
+
+            # Stop docker
+            docker-compose down
+
+            # Start docker-compose
+            docker-compose up -d
