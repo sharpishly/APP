@@ -36,3 +36,5 @@ jobs:
             
             # Placeholder for your next commands
             echo "Script finished. Add your next commands here."
+
+            # Testing new private ssh key saved in GitHub
