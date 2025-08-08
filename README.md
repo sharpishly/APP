@@ -67,9 +67,14 @@ curl http://localhost:2000
 
 ```
 
+# Python Project
+
+```
+http://167.99.92.156:8000/
+
+```
+
 # Directory list
-
-
 
 ### Notes
 
