@@ -22,6 +22,7 @@ services:
       retries: 3
     depends_on:
       - php_fpm
+      - python_app
     command: >
       /bin/sh -c "
         chmod -R 755 /var/www/html/sharpishly &&
@@ -29,6 +30,7 @@ services:
         chown -R www-data:www-data /var/www/html/sharpishly &&
         chown -R www-data:www-data /var/www/html/dev_sharpishly &&
         nginx -g 'daemon off;'"
+
   php_fpm:
     build:
       context: .
@@ -44,6 +46,22 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  python_app:
+    build:
+      context: ./python_project
+      dockerfile: Dockerfile
+    container_name: python_app
+    ports:
+      - "8000:8000"
+    networks:
+      - sharpishly-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 networks:
   sharpishly-network:
     driver: bridge
