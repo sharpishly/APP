@@ -63,4 +63,4 @@ jobs:
             docker-compose down
 
             # Start docker-compose
-            docker-compose up -d
+            docker-compose up -d --build
