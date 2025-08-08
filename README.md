@@ -15,8 +15,6 @@ git clone --recurse-submodules git@github.com:sharpishly/app.git
 git pull origin master
 
 ```
-
-
 # Start Docker
 
 ```
@@ -25,7 +23,6 @@ docker-compose down
 docker-compose up -d
 
 ```
-
 
 # Install Docker if not already installed
 ```
