@@ -57,7 +57,7 @@
     <!-- Footer Section -->
     <footer class="bg-gray-800 text-white p-4 mt-8">
         <div class="container mx-auto text-center text-sm">
-            &copy; 2024 Sharpihly. All rights reserved.
+            &copy; 2024 Sharpishly. All rights reserved.
         </div>
     </footer>
 
