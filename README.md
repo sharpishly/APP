@@ -15,6 +15,15 @@ git clone --recurse-submodules git@github.com:sharpishly/app.git
 git pull origin master
 
 ```
+
+# Git create new dev branch
+
+```
+git checkout -b app_dev && git push --set-upstream origin app_dev
+
+```
+
+
 # Start Docker
 
 ```
