@@ -23,6 +23,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             # Navigate to the correct directory
+
+            # Stop nginx on the host after reboot
+            sudo service nginx restart
+
             cd /var/www/app
             
             # Run the deployment commands provided by the user
