@@ -25,7 +25,7 @@ jobs:
             # Navigate to the correct directory
 
             # Stop nginx on the host after reboot
-            sudo service nginx restart
+            sudo service nginx stop
 
             cd /var/www/app
             
