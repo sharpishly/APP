@@ -77,17 +77,25 @@ http://167.99.92.156:8000/
 # Project Features
 
 ```
-
+* Sharpishly Docs : /var/www/sharpishly_app/docs/html/index.html
 * Docker containers
 * GitHub Continous Delivery
-* GitHub Continous Delivery
+* GitHub Continous Integration
 * CertBot
 * Nginx
 * MySQL
 * Linux
 * Bash
-* Python
+* Python Project : /var/www/sharpishly_app/python_project/docs/html/index.html
 * Python MVC
 * PHP
+
+```
+
+# How to use website
+
+```
+
+* Navigation and site map
 
 ```
