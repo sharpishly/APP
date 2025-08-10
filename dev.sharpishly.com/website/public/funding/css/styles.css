@@ -1,0 +1,263 @@
+/* General Styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+
+/* Submenu Styling */
+
+header {
+    background: #ccc;
+    color: white;
+    padding: 10px 20px;
+}
+
+header .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+header .menu > li {
+    position: relative;
+    margin-right: 20px;
+}
+
+header .menu > li > a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    display: block;
+}
+
+header .menu > li:hover > .sub-menu {
+    display: block;
+}
+
+header .sub-menu {
+    display: none;
+    position: absolute;
+    background: #444;
+    padding: 10px;
+    list-style: none;
+    top: 100%;
+    left: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+header .sub-menu li {
+    margin: 0;
+}
+
+header .sub-menu li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+
+/* Navbar Styling */
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.navbar-menu {
+    display: flex;
+    list-style-type: none;
+}
+
+.navbar-item {
+    margin: 0 15px;
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}
+
+.navbar-link:hover {
+    text-decoration: underline;
+}
+
+/* Main Content Styling */
+.main-content {
+    padding: 50px;
+    background-color: #f4f4f4;
+}
+
+.hero {
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.about-section, .services-section {
+    margin: 50px 0;
+}
+
+.services-section {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.service {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    margin: 10px;
+}
+
+.service h3 {
+    font-size: 24px;
+}
+
+.service p {
+    font-size: 16px;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer a {
+    text-decoration: none;
+    color: white;
+    margin: 0 10px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar-menu.active {
+    	display: flex;
+    	z-index: 1000;
+    	position: absolute;
+    	top: 28px;
+    	left: 0px;
+    	background-color: #333333;    }
+
+    .navbar-item {
+        margin: 10px 0;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .services-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .service {
+        width: 80%;
+    }
+}
+
+
+/* Table Container (optional for responsiveness) */
+.table-container {
+    overflow-x: auto; /* Enable horizontal scrolling for small screens */
+    margin: 20px 0;
+}
+
+/* General Table Styling */
+table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Remove double borders */
+    margin: 20px 0; /* Spacing around the table */
+    font-size: 16px; /* Readable text size */
+    text-align: left; /* Align text to the left */
+}
+
+/* Table Header Styling */
+th {
+    background-color: #0073e6; /* Blue header background */
+    color: white; /* White text for contrast */
+    padding: 12px; /* Padding inside cells */
+    text-transform: uppercase; /* Uppercase text */
+}
+
+/* Table Row and Cell Styling */
+td {
+    padding: 12px; /* Padding inside cells */
+    border: 1px solid #ddd; /* Light gray border */
+    color: #333; /* Dark text color */
+}
+
+/* Alternate Row Background */
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray for even rows */
+}
+
+/* Hover Effect for Rows */
+tr:hover {
+    background-color: #e9ecef; /* Slightly darker gray on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    table {
+        font-size: 14px; /* Smaller text on small screens */
+    }
+
+    th, td {
+        padding: 8px; /* Reduced padding on small screens */
+    }
+}
+

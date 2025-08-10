@@ -1,0 +1,21 @@
+use Nats\Nats;
+
+$nats = new Nats('192.168.0.22', 4223);
+
+try {
+    $nats->connect();
+    $nats->subscribe('test.subject', function ($subject, $data, $replyTo) {
+        echo "Received: $data\n";
+    });
+
+    sleep(1); // Add a small delay
+
+    $nats->publish('test.subject', 'Test message');
+
+    $nats->wait(5); // Wait for a few seconds
+
+    $nats->close();
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>

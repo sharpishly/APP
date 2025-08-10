@@ -1,0 +1,18 @@
+https://accounts.zoho.com/oauth/v2/auth?
+scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL,ZohoCRM.settings.ALL&
+client_id=1000.RYS1Z1VZ4UYZTQ2DO6F4NDCHFVSKIT&
+response_type=code&
+access_type=offline&
+redirect_uri=https://sharpishly.com/zoho/callback
+
+🔁 Next Step: Exchange code for Refresh Token
+
+Once you get the code from the redirect, you can exchange it via a POST request:
+POST https://accounts.zoho.com/oauth/v2/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=1000.RYS1Z1VZ4UYZTQ2DO6F4NDCHFVSKIT&
+client_secret=YOUR_CLIENT_SECRET&
+grant_type=authorization_code&
+code=CODE_FROM_REDIRECT&
+redirect_uri=https://sharpishly.com/zoho/callback

@@ -1,0 +1,197 @@
+/* Basic Reset for full page */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevent body scroll if content is shorter than viewport */
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Background Carousel Container */
+.background-carousel {
+    position: fixed; /* Fixes it to the viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Puts it behind all other content */
+    overflow: hidden; /* Hides any overflow from images */
+}
+
+/* Individual Carousel Slides */
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Start hidden */
+    transition: opacity 1.5s ease-in-out; /* Smooth fade transition */
+}
+
+.carousel-slide.active {
+    opacity: 1; /* Show active slide */
+}
+
+/* Image within the slide */
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the entire container without distortion */
+    object-position: center; /* Centers the image within the container */
+}
+
+/* Styles for your main content (example) */
+body > *:not(.background-carousel) {
+    position: relative; /* Ensure main content is positioned above the background */
+    z-index: 1; /* Give it a z-index higher than -1 */
+    /* Add padding/margin as needed for your content */
+    min-height: 100vh; /* Ensure content area takes at least full viewport height */
+    overflow-y: auto; /* Allow content to scroll if it overflows */
+}
+
+header {
+    /* Existing header styles from HTML example */
+    /* For demonstration, give it some height and background so you can see it */
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+
+.container {
+    position: relative; 
+    z-index: 10; 
+    color: white; 
+    text-align: center; 
+    padding: 50px; 
+    background: rgba(0,0,0,0.5);
+    border:1px solid #ccc;
+}
+
+.row {
+    border:1px solid #ccc;
+    padding: 0px;
+    margin-bottom: 20px;
+}
+
+.row img {
+    padding: 0px;
+    float: right;
+}
+
+.row p {
+    padding-top: 10px;
+}
+
+.row a {
+    color:#ccc;
+    text-decoration: none;
+}
+
+/* Existing styles */
+/* ... */
+
+/* Style for input file tag (Add these new rules) */
+input[type="file"] {
+    display: block; /* Ensures it takes its own line */
+    margin: 15px 0;
+    font-family: Arial, sans-serif;
+    color: #333;
+    width: 100%; /* Make it take full width of its parent */
+    box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+
+/* Style the file selector button */
+input[type="file"]::file-selector-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* A nice blue for the button */
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Ensure the button is not too wide, or consider making it fixed width if desired */
+    /* max-width: 150px; */ 
+    white-space: nowrap; /* Prevent text wrapping inside the button */
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-1px); /* Slight lift effect */
+}
+
+input[type="file"]::file-selector-button:active {
+    background-color: #004085; /* Even darker on click */
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Optional: Style the text part of the input where the file name appears */
+/* This part can be tricky for cross-browser consistency */
+input[type="file"] {
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    /* You might want to adjust font size or color */
+    font-size: 1em;
+    color: #555;
+}
+
+/* Specific styling for the label of the file input, if needed */
+.row label[for="myFile"] {
+    display: block; /* Makes label take its own line */
+    margin-bottom: 5px; /* Adds space below the label */
+    color: white; /* Match your container text color */
+    font-weight: bold;
+}
+
+/* Additional styling for your form fields to ensure they look good within the .container */
+form fieldset {
+    border: none; /* Remove default fieldset border */
+    padding: 0;
+    margin: 0;
+}
+
+form .row {
+    padding: 15px; /* Add some internal padding for form rows */
+    background: rgba(255, 255, 255, 0.1); /* Slightly lighter background for form rows */
+    border-radius: 5px; /* Rounded corners for form rows */
+    margin-bottom: 20px; /* Space between form rows */
+    display: flex; /* Use flexbox for layout within the row */
+    flex-direction: column; /* Stack label and input vertically */
+    align-items: flex-start; /* Align items to the start */
+}
+
+/* Style for the Submit Application button */
+.container button[type="submit"] {
+    display: block; /* Make it take its own line */
+    margin: 20px auto 0; /* Center it and add space above */
+    padding: 12px 25px; /* Comfortable padding */
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745; /* A pleasant green for a submit action */
+    color: white;
+    cursor: pointer;
+    font-size: 1.1em; /* Slightly larger font */
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25); /* More pronounced shadow */
+    width: auto; /* Allow button to size naturally based on content */
+    min-width: 180px; /* Ensure a minimum width for better appearance */
+}
+
+.container button[type="submit"]:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: translateY(-2px); /* More noticeable lift effect */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.container button[type="submit"]:active {
+    background-color: #1e7e34; /* Even darker on click */
+    transform: translateY(0); /* Return to original position */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
+}

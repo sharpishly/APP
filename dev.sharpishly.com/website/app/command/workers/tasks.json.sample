@@ -1,0 +1,29 @@
+[
+  {
+    "taskType": "processImage",
+    "imagePath": "/path/to/image1.jpg",
+    "userId": 123
+  },
+  {
+    "taskType": "sendEmail",
+    "recipient": "user@example.com",
+    "subject": "Welcome!",
+    "body": "Thank you for signing up."
+  },
+  {
+    "taskType": "updateDatabase",
+    "table": "users",
+    "recordId": 456,
+    "data": {
+      "status": "active"
+    }
+  },
+  {
+    "taskType": "InstagramNotification",
+    "table": "instagram",
+    "recordId": 1,
+    "data": {
+      "status": "active"
+    }
+  }
+]
