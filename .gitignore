@@ -1,0 +1,5 @@
+# Hide file from Git
+/shells
+
+# Enviromental variables
+.env
