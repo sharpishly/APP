@@ -80,6 +80,7 @@ http://167.99.92.156:8000/
 
 ```
 * Sharpishly Docs : /var/www/sharpishly_app/docs/html/index.html
+* Project Management : https://sharpishly-project-management.atlassian.net/jira/software/projects/CRM/boards/1
 * Docker containers
 * GitHub Continous Delivery
 * GitHub Continous Integration
