@@ -17,7 +17,6 @@ services:
     build: ./php
     volumes:
       - ./website:/var/www/sharpishly/website
-      - /var/log/letsencrypt:/var/log/letsencrypt
     env_file: .env
 
   db:
