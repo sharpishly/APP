@@ -51,6 +51,3 @@ Thumbs.db
 # Upload directory
 website/app/uploads/
 
-# Environmental file
-.env
-
