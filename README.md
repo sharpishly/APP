@@ -92,6 +92,8 @@ http://167.99.92.156:8000/
 * Python Project : /var/www/sharpishly_app/python_project/docs/html/index.html
 * Python MVC : https://bitbucket.org/don_dev/php-mini-framework/src/master/
 * PHP
+* pip3 install git-filter-repo
+
 
 ```
 
