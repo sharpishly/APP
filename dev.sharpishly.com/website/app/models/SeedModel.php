@@ -135,6 +135,107 @@ class SeedModel extends Model {
 		return $conditions;
 	}
 
+	public function admin_email($data,$models,$options){
+
+		$options['tbl'] = 'migrate_admin';
+
+		$fields = array(
+			array(
+				'title' => 'Email',
+				'description' => 'Email MVC',
+				'url'=>'email/index',
+			)
+		);
+
+		$conditions = $this->set_conditions($data,$fields,$options);
+
+		$data = $this->seeding($data, __FUNCTION__ . '_1','foo',$conditions);
+
+		return $data;
+	}
+
+	public function headers_one($data,$models,$options){
+
+		$options['tbl'] = 'migrate_headers';
+
+		$fields = array(
+			array(
+				'title' => 'Sharpishly',
+				'description' => 'Landing Page',
+			),
+		);
+
+		$conditions = $this->set_conditions($data,$fields,$options);
+
+		$data = $this->seeding($data, __FUNCTION__,'foo',$conditions);
+
+		return $data;
+	}
+
+	public function headers_one_keywords($data,$models,$options){
+
+		$options['tbl'] = 'migrate_headers_notes';
+
+		$fields = array(
+			array(
+				'title' => 'Research & Development',
+				'description' => 'Pioneering scientific research and innovative technology development for future-focused solutions.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'Online Innovation',
+				'description' => 'Accelerating breakthroughs through virtual R&D, digital collaboration, and AI-powered discovery.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'AI & Machine Learning',
+				'description' => 'Expertise in artificial intelligence, machine learning, and deep learning for transformative solutions.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'Biotechnology Solutions',
+				'description' => 'Leading-edge biotechnology and bioinformatics research for advancements in life sciences.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'Sustainable Technology',
+				'description' => 'Developing eco-friendly and sustainable technologies for a responsible future.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'R&D Consulting',
+				'description' => 'Strategic R&D consulting and innovation strategy to unlock your project’s full potential.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'Product Prototyping',
+				'description' => 'From concept to prototype: rapid development and feasibility studies for new products.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'Custom R&D',
+				'description' => 'Tailored research and development services to solve complex challenges and create custom solutions.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'Global Collaboration',
+				'description' => 'Seamless online platform fostering global R&D partnerships and open innovation.',
+				'noteid'=>1
+			),
+			array(
+				'title' => 'Future Tech',
+				'description' => 'Exploring and developing disruptive technologies for tomorrow’s challenges and opportunities.',
+				'noteid'=>1
+			)
+		);
+
+		$conditions = $this->set_conditions($data,$fields,$options);
+
+		$data = $this->seeding($data, __FUNCTION__,'foo',$conditions);
+
+		return $data;
+	}
+
 	public function admin($data,$models,$options){
 
 		$options['tbl'] = 'migrate_admin';
@@ -147,7 +248,7 @@ class SeedModel extends Model {
 			),
 			array(
 				'title' => 'Cyber Security',
-				'description' => '/cybersecurity/index',
+				'description' => 'Penetration testing',
 				'url'=>'cybersecurity/index/',
 			),
 			array(
@@ -164,7 +265,7 @@ class SeedModel extends Model {
 
 		$conditions = $this->set_conditions($data,$fields,$options);
 
-		$data = $this->seeding($data, __FUNCTION__ . '_4','foo',$conditions);
+		$data = $this->seeding($data, __FUNCTION__ . '_5','foo',$conditions);
 
 		return $data;
 	}
@@ -222,6 +323,12 @@ class SeedModel extends Model {
 	public function seed($data,$models,$options){
 		
 		if($this->directive($data,__FUNCTION__)){
+
+			$data = $this->headers_one($data,$models,$options);
+
+			$data = $this->headers_one_keywords($data,$models,$options);
+
+			$data = $this->admin_email($data,$models,$options);
 
 			$data = $this->admin($data,$models,$options);
 

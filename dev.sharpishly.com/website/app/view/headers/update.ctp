@@ -7,8 +7,8 @@
 <h2>{{{h2}}}</h2>
 
 <p>
-    <a href="{{{add}}}" class="note-button">Add note</a>
-    <a href="{{{details}}}" class="note-button">See note</a>
+    <a href="{{{add}}}" class="note-button">Add meta tags</a>
+    <a href="{{{details}}}" class="note-button">See meta tags</a>
 </p>
 
 <table class="table">

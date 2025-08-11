@@ -1,8 +1,15 @@
 /* General Styling */
-body, html {
+html {
+    height: 100%; /* Make sure html takes full height */
+}
+
+body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Arrange children vertically */
+    min-height: 100%; /* Ensure body takes at least full viewport height */
 }
 
 /* Submenu Styling */
@@ -112,6 +119,7 @@ header .sub-menu li a {
 
 /* Main Content Styling */
 .main-content {
+    flex-grow: 1; /* Allow main content to grow and take available space */
     padding: 50px;
     background-color: #f4f4f4;
 }
@@ -246,6 +254,7 @@ header .sub-menu li a {
     color: white;
     padding: 20px;
     text-align: center;
+    /* No need for position: absolute or fixed with flexbox */
 }
 
 .footer a {
@@ -267,12 +276,12 @@ header .sub-menu li a {
     }
 
     .navbar-menu.active {
-    	display: flex;
-    	z-index: 1000;
-    	position: absolute;
-    	top: 28px;
-    	left: 0px;
-    	background-color: #333333;    }
+        display: flex;
+        z-index: 1000;
+        position: absolute;
+        top: 28px;
+        left: 0px;
+        background-color: #333333;    }
 
     .navbar-item {
         margin: 10px 0;
@@ -343,4 +352,3 @@ tr:hover {
         padding: 8px; /* Reduced padding on small screens */
     }
 }
-

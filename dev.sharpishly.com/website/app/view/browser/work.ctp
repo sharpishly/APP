@@ -6,8 +6,6 @@
     <!-- h2 -->
     <h2>{{{h2}}}</h2>
 
-    <p>
-        <a href="/sharpishly/index">Chorlton Online</a>
-    </p>
+    {{{links}}}
 
 {{{footer}}}

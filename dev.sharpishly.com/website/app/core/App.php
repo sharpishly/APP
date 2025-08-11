@@ -65,6 +65,13 @@ class App {
 			'todo',
 			'vacancies',
 			'urbanwetsuit',
+			'email',
+			'fxsurveyor',
+			'excusegame',
+			'yikesdude',
+			'yougogirl',
+			'headers',
+			'api'
 		);
 
 		$fields = array(

@@ -689,6 +689,39 @@ class MigrationsModel extends Model{
         'prefix' => 'migrate_'
     );
 
+    public $migrate_headers = array(
+        'table' => 'headers',
+        'create' => array(
+            'id' => 'INT(100) PRIMARY KEY AUTO_INCREMENT',
+            'userid' => 'VARCHAR(255)',
+            'title' => 'VARCHAR(255)',
+            'description' => 'TEXT',
+            'url' => 'VARCHAR(255)',
+            'email' => 'VARCHAR(255)',
+            'pref' => 'TEXT',
+            'content' => 'LONGTEXT',
+            'date' => 'DATETIME',
+            'status'=>'INT(255)'
+        ),
+        'prefix' => 'migrate_'
+    );
+
+    public $migrate_headers_notes = array(
+        'table' => 'headers_notes',
+        'create' => array(
+            'id' => 'INT(100) PRIMARY KEY AUTO_INCREMENT',
+            'noteid' => 'VARCHAR(255)',
+            'title' => 'VARCHAR(255)',
+            'description' => 'TEXT',
+            'url' => 'VARCHAR(255)',
+            'pref' => 'TEXT',
+            'content' => 'LONGTEXT',
+            'date' => 'DATETIME',
+            'status'=>'INT(255)'
+        ),
+        'prefix' => 'migrate_'
+    );
+
 	public function main($data,$models,$options=false){
 
 		//TODO: Add explict url method
@@ -801,6 +834,10 @@ class MigrationsModel extends Model{
             $data = $this->migrate_vacancies($data,$options);
 
             $data = $this->migrate_vacancies_notes($data,$options);
+
+            $data = $this->migrate_headers($data,$options);
+
+            $data = $this->migrate_headers_notes($data,$options);
 			
 			$data = $this->set($data, 'title', 'Migrations');
 
@@ -1282,6 +1319,28 @@ class MigrationsModel extends Model{
     public function migrate_vacancies_notes($data,$options=false){
         
         $conditions = $this -> migrate_vacancies_notes;
+
+        $result = $this -> db -> create($conditions);
+
+		$data = $this->set($data,__FUNCTION__,$result);
+        
+        return $data;
+    }
+
+    public function migrate_headers($data,$options=false){
+        
+        $conditions = $this -> migrate_headers;
+
+        $result = $this -> db -> create($conditions);
+
+		$data = $this->set($data,__FUNCTION__,$result);
+        
+        return $data;
+    }
+
+    public function migrate_headers_notes($data,$options=false){
+        
+        $conditions = $this -> migrate_headers_notes;
 
         $result = $this -> db -> create($conditions);
 

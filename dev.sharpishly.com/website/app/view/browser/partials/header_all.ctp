@@ -3,7 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Grants Page with HTML, CSS, and JavaScript">
+    <meta name="title" content="Sharpishly - Leading Online Research & Development">
+    <meta name="description" content="{{{description}}}">
+    <meta name="keywords" content="{{{keywords}}}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sharpishly.com/">
+    <meta property="og:title" content="Sharpishly - Leading Online Research & Development">
+    <meta property="og:description" content="{{{description}}}">
+    <meta property="og:image" content="https://www.sharpishly.com/images/og-image.jpg"> 
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.sharpishly.com/">
+    <meta property="twitter:title" content="Sharpishly - Leading Online Research & Development">
+    <meta property="twitter:description" content="{{{description}}}">
+    <meta property="twitter:image" content="https://www.sharpishly.com/images/twitter-image.jpg"> 
+    <link rel="canonical" href="https://www.sharpishly.com/"> 
     <title>{{{title}}}</title>
     <link rel="stylesheet" href="/{{{model}}}/css/styles.css">
 </head>

@@ -10,9 +10,9 @@ class HeadersModel extends Model {
 
         $options = [];
 
-		$data = $this->set($data,'tbl','migrate_interviews');
+		$data = $this->set($data,'tbl','migrate_headers');
 
-		$data = $this->set($data,'tbl_notes','migrate_interviews_notes');
+		$data = $this->set($data,'tbl_notes','migrate_headers_notes');
 
 		$data = $this->header($data);
 

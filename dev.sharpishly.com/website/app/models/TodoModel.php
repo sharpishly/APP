@@ -50,7 +50,7 @@ class TodoModel extends Model {
 
 		$data = $this->searching($data,$models,$options);
 
-        new dBug($data);
+        // new dBug($data);
 
 		// new dBug($_SESSION);
 

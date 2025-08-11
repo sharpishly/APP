@@ -477,10 +477,48 @@ class BrowserModel extends Model {
 		return $data;
 	}
 
+	public function links($data,$models,$options){
+
+		$fields = array(
+			'<strong>Excuse</strong> Game'=>'excusegame/index',
+			'<strong>Chorlton</strong> Online'=>'sharpishly/index',
+			'<strong>FX</strong> Surveyors'=>'fxsurveyor/index',
+			'<strong>Yikes!</strong> DUDE'=>'yikesdude/index',
+			'<strong>You Go</strong> Girl'=>'yougogirl/index'
+
+		);
+
+		$part = array();
+
+		$partial = array();
+
+		foreach($fields as $key => $value){
+
+			$arr = array(
+				'href'=>$this->helper->url($value),
+				'class'=>__FUNCTION__,
+			);
+			
+			$attr = $this->attributes->set($arr);
+
+			$part = array(
+				'link'=>$attr,
+				'title'=>$key
+			);
+
+			$partial[] = $part;
+		}
+
+		$data = $this->partials->spartials($data, __FUNCTION__, $partial);
+
+		return $data;
+	}
 
     public function work($data,$models,$options){
 		
 		if($this->directive($data,__FUNCTION__)){
+
+			$data = $this->links($data,$models,$options);
 
 			$h1 = ucfirst(__FUNCTION__);
 
@@ -501,14 +539,80 @@ class BrowserModel extends Model {
 		
 	}
 
+	public function set_meta_keyword($rs,$data){
+
+		$r = '';
+
+		if(isset($rs['result'][0]['id'])){
+
+			$fields = $rs['result'];
+			$it = new \ArrayIterator($fields);
+			$it = new \CachingIterator($it,0);
+
+			foreach ($it as $item) {
+				$r .= $item['title']; // Access the 'title' key of the current inner array
+				if ($it->hasNext()) {
+					$r .= ', '; // Add a comma and space if it's not the last item
+				}
+			}
+				
+		}
+
+		$data['partials']['header_all'][0]['keywords'] = $r;
+
+		return $data;
+	}
+
+	public function set_meta_description($rs,$data){
+
+		$r = '';
+
+		if(isset($rs['result'][0]['id'])){
+
+			$fields = $rs['result'];
+			$it = new \ArrayIterator($fields);
+			$it = new \CachingIterator($it,0);
+
+			foreach ($it as $item) {
+				$r .= $item['description']; // Access the 'title' key of the current inner array
+				if ($it->hasNext()) {
+					$r .= ', '; // Add a comma and space if it's not the last item
+				}
+			}
+				
+		}
+
+		$data['partials']['header_all'][0]['description'] = $r;
+
+		return $data;
+	}
+
+	public function get_meta_tags($data, $models=false, $options=false){
+
+		$conditions = array(
+			'table'=>'migrate_headers_notes',
+			'order'=>array('id'=>'DESC')
+		);
+
+		$rs = $this->db->find($conditions);
+
+		$data = $this->set_meta_keyword($rs,$data);
+
+		$data = $this->set_meta_description($rs,$data);
+
+		$data = $this->set($data,__FUNCTION__,$rs);
+
+		return $data;
+	}
+
     public function index($data,$models,$options){
 		
 		if($this->directive($data,__FUNCTION__)){
 
+			$data = $this->get_meta_tags($data);
+
 			$h2 = 'Welcome to Sharpishly select from the links below to choose what 
 			experience you want!';
-
-			//@TODO: surveyor/index full fat site
 
 			$arr = array(
 				'h1'=>'Sharpishly',

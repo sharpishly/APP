@@ -475,6 +475,26 @@ class AdminModel extends Model {
 		return $data;
 	}
 
+	public function pretty_date($rs){
+
+		foreach($rs['result'] as $key => $value){
+
+			$i = 'date';
+
+			$format = (STRING) $value[$i];
+
+			$r = $this->timewarp->convertDateFormat($format);
+
+			$value[$i] = $r['format1'];
+
+			$rs['result'][$key] = $value;
+
+		}
+
+		return $rs;
+
+	}
+
 
     public function index($data,$models,$options){
 		
@@ -486,9 +506,9 @@ class AdminModel extends Model {
 			
 			$wheres = array(
 				'status'=>'1',
-				'or'=>array(
-					'status'=>array(2,3,5)
-				)
+				// 'or'=>array(
+				// 	'status'=>array(2,3,5)
+				// )
 			);
 
 			$conditions = array(
@@ -501,6 +521,8 @@ class AdminModel extends Model {
 			$rs = $this->db->find($conditions);
 
 			$rs = $this->check_if_records_exists($rs,$options);
+
+			$rs = $this->pretty_date($rs);
 
 			$rs = $this->set_record_url($rs,'link','update',$data);
 

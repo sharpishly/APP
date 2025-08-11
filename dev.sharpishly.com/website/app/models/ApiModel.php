@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use dBug\dBug;
+use CurlRequest\CurlRequest;
+
 
 class ApiModel extends Model {
 
@@ -381,9 +383,63 @@ class ApiModel extends Model {
 		return $data;
 	}
 
+	public function request($data,$models=false,$options=false){
+
+
+
+		// Assume the CurlRequest class is in a file named CurlRequest.php and is included.
+		// If you are using an autoloader, this line might not be necessary.
+		//require_once 'CurlRequest.php';
+
+
+		try {
+			$url = 'https://dev.sharpishly.com/todo/gateway';
+			$method = 'POST';
+
+			// The body must be a URL-encoded string to match the Content-Type header.
+			// This is the correct format for form-urlencoded data.
+			$body = 'email=steve%40austin.com&password=admin12345';
+
+			// Headers array. Note the standard 'Header-Name: Header-Value' format.
+			$headers = [
+				'Content-Type: application/x-www-form-urlencoded',
+				// Including these headers helps the request emulate a browser more closely.
+				'Origin: https://dev.sharpishly.com',
+				'Referer: https://dev.sharpishly.com/todo/index'
+			];
+
+			$options = [
+				'headers' => $headers,
+				'body' => $body,
+				// It's good practice to add a cookie from a previous session if required.
+				// For a first-time login, you would not have this.
+				// 'cookie' => 'PHPSESSID=...; _tccl_visitor=...'
+			];
+
+			// Make the request using your class
+			$response = CurlRequest::send($url, $method, $options);
+
+			// Print the response for verification
+			echo "Status: " . $response['status'] . "\n";
+			echo "Body: " . $response['body'] . "\n";
+			echo "Headers:\n";
+			print_r($response['headers']);
+
+		} catch (\Exception $e) {
+			// Handle any exceptions thrown by the CurlRequest class
+			echo "Request Failed: " . $e->getMessage() . "\n";
+		}
+
+
+
+		return $data;
+	}
+
     public function index($data,$models,$options){
 		
 		if(isset($data['directive']) && $data['directive'] === 'index'){
+
+			$data = $this->request($data);
 
 			$data = $this->pagination($data);
 			

@@ -5,211 +5,205 @@ namespace SimpleEmail;
 /**
  * Class SimpleEmail
  *
- * A simple PHP class for sending emails without relying on external libraries.
- * It uses PHP's built-in mail() function.
+ * A simple PHP class for sending emails without external libraries.
  */
-class SimpleEmail {
+class SimpleEmail
+{
+    private string $to = '';
+    private string $subject = '';
+    private string $message = '';
+    private string $headers = '';
+    private string $parameters = '';
+    private bool $isHtml = false;
+    private array $attachments = [];
 
-    /**
-     * @var string The recipient(s) of the email. Can be a single email address or a comma-separated list.
-     */
-    private $to;
+    public function __construct(
+        string $to = '',
+        string $subject = '',
+        string $message = '',
+        string $from = '',
+        bool $isHtml = false
+    ) {
+        $this->setTo($to);
+        $this->setSubject($subject);
+        $this->setMessage($message);
+        $this->setHtml($isHtml);
 
-    /**
-     * @var string The subject of the email.
-     */
-    private $subject;
+        if ($from) {
+            $this->addHeader("From: " . $this->sanitizeEmail($from));
+        }
+        $this->addHeader("MIME-Version: 1.0");
+    }
 
-    /**
-     * @var string The body/message content of the email.
-     */
-    private $message;
+    private function sanitizeEmail(string $email): string
+    {
+        return filter_var(trim($email), FILTER_SANITIZE_EMAIL);
+    }
 
-    /**
-     * @var string Additional headers for the email, such as From, Cc, Bcc, Content-Type, etc.
-     * Each header should be separated by CRLF (\r\n).
-     */
-    private $headers;
+    private function sanitizeHeader(string $header): string
+    {
+        return preg_replace('/[\r\n]+/', '', trim($header));
+    }
 
-    /**
-     * @var string Additional parameters to pass to the sendmail program.
-     */
-    private $parameters;
+    private function sanitizeSubject(string $subject): string
+    {
+        return $this->sanitizeHeader($subject);
+    }
 
-    /**
-     * Constructor for the SimpleEmail class.
-     *
-     * @param string $to The recipient(s) email address(es).
-     * @param string $subject The subject of the email.
-     * @param string $message The body of the email.
-     * @param string $headers Optional additional headers.
-     * @param string $parameters Optional additional parameters for sendmail.
-     */
-    public function __construct($to = '', $subject = '', $message = '', $headers = '', $parameters = '') {
-        $this->to = $to;
-        $this->subject = $subject;
+    public function setTo(string $to): self
+    {
+        $this->to = $this->sanitizeEmail($to);
+        return $this;
+    }
+
+    public function setSubject(string $subject): self
+    {
+        $this->subject = $this->sanitizeSubject($subject);
+        return $this;
+    }
+
+    public function setMessage(string $message): self
+    {
         $this->message = $message;
-        $this->headers = $headers;
+        return $this;
+    }
+
+    public function setHeaders(string $headers): self
+    {
+        $this->headers = trim($headers);
+        return $this;
+    }
+
+    public function setParameters(string $parameters): self
+    {
         $this->parameters = $parameters;
-    }
-
-    /**
-     * Sets the recipient(s) of the email.
-     *
-     * @param string $to A single email address or a comma-separated list of addresses.
-     * @return SimpleEmail Returns the current instance for method chaining.
-     */
-    public function setTo($to) {
-        $this->to = $to;
         return $this;
     }
 
-    /**
-     * Gets the current recipient(s).
-     *
-     * @return string
-     */
-    public function getTo() {
-        return $this->to;
-    }
-
-    /**
-     * Sets the subject of the email.
-     *
-     * @param string $subject The subject string.
-     * @return SimpleEmail Returns the current instance for method chaining.
-     */
-    public function setSubject($subject) {
-        $this->subject = $subject;
+    public function setHtml(bool $isHtml = true): self
+    {
+        $this->isHtml = $isHtml;
         return $this;
     }
 
-    /**
-     * Gets the current subject.
-     *
-     * @return string
-     */
-    public function getSubject() {
-        return $this->subject;
-    }
-
-    /**
-     * Sets the message body of the email.
-     *
-     * @param string $message The message body string.
-     * @return SimpleEmail Returns the current instance for method chaining.
-     */
-    public function setMessage($message) {
-        $this->message = $message;
+    public function addHeader(string $header): self
+    {
+        $header = $this->sanitizeHeader($header);
+        if (stripos($this->headers, $header) === false) {
+            $this->headers .= (empty($this->headers) ? '' : "\r\n") . $header;
+        }
         return $this;
     }
 
-    /**
-     * Gets the current message body.
-     *
-     * @return string
-     */
-    public function getMessage() {
-        return $this->message;
-    }
+    public function addAttachment(string $filePath, string $fileName = ''): self
+    {
+        if (!is_readable($filePath)) {
+            error_log("SimpleEmail Error: Cannot read attachment file: $filePath");
+            return $this;
+        }
 
-    /**
-     * Sets additional headers for the email.
-     *
-     * Example: "From: sender@example.com\r\nReply-To: reply@example.com\r\nContent-Type: text/html; charset=UTF-8"
-     *
-     * @param string $headers The headers string.
-     * @return SimpleEmail Returns the current instance for method chaining.
-     */
-    public function setHeaders($headers) {
-        $this->headers = $headers;
+        $content = base64_encode(file_get_contents($filePath));
+        $fileName = $fileName ?: basename($filePath);
+
+        $this->attachments[] = [
+            'name' => htmlspecialchars($this->sanitizeHeader($fileName), ENT_QUOTES, 'UTF-8'),
+            'content' => $content,
+            'type' => mime_content_type($filePath)
+        ];
+
         return $this;
     }
 
-    /**
-     * Gets the current headers.
-     *
-     * @return string
-     */
-    public function getHeaders() {
+    public function isValidEmail(string $email): bool
+    {
+        $emails = array_map('trim', explode(',', $email));
+        foreach ($emails as $e) {
+            if (!filter_var($e, FILTER_VALIDATE_EMAIL)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function buildMessageBody(): string
+    {
+        if (empty($this->attachments)) {
+            return $this->message;
+        }
+
+        $boundary = md5(uniqid(time()));
+        $body = "--$boundary\r\n";
+        $body .= $this->isHtml 
+            ? "Content-Type: text/html; charset=UTF-8\r\n"
+            : "Content-Type: text/plain; charset=UTF-8\r\n";
+        $body .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+        $body .= $this->message . "\r\n";
+
+        foreach ($this->attachments as $attachment) {
+            $body .= "--$boundary\r\n";
+            $body .= "Content-Type: {$attachment['type']}; name=\"{$attachment['name']}\"\r\n";
+            $body .= "Content-Transfer-Encoding: base64\r\n";
+            $body .= "Content-Disposition: attachment; filename=\"{$attachment['name']}\"\r\n\r\n";
+            $body .= chunk_split($attachment['content']) . "\r\n";
+        }
+
+        $body .= "--$boundary--";
+
+        // Add boundary header
+        $this->addHeader("Content-Type: multipart/mixed; boundary=\"$boundary\"");
+
+        return $body;
+    }
+
+    private function buildHeaders(): string
+    {
+        if (empty($this->attachments)) {
+            $this->addHeader(
+                $this->isHtml
+                    ? "Content-Type: text/html; charset=UTF-8"
+                    : "Content-Type: text/plain; charset=UTF-8"
+            );
+        }
         return $this->headers;
     }
 
-    /**
-     * Sets additional parameters for the sendmail program.
-     *
-     * @param string $parameters The parameters string.
-     * @return SimpleEmail Returns the current instance for method chaining.
-     */
-    public function setParameters($parameters) {
-        $this->parameters = $parameters;
-        return $this;
-    }
+    public function send(): bool
+    {
+        try {
+            if (empty($this->to)) {
+                throw new \InvalidArgumentException("Recipient email address is missing.");
+            }
 
-    /**
-     * Gets the current parameters.
-     *
-     * @return string
-     */
-    public function getParameters() {
-        return $this->parameters;
-    }
+            if (!$this->isValidEmail($this->to)) {
+                throw new \InvalidArgumentException("Invalid email address: {$this->to}");
+            }
 
-    /**
-     * Adds a single header to the existing headers.
-     *
-     * @param string $header The header line (e.g., "From: sender@example.com").
-     * @return SimpleEmail Returns the current instance for method chaining.
-     */
-    public function addHeader($header) {
-        if (!empty($this->headers)) {
-            $this->headers .= "\r\n";
-        }
-        $this->headers .= $header;
-        return $this;
-    }
+            if (empty($this->subject)) {
+                throw new \InvalidArgumentException("Email subject is missing.");
+            }
 
-    /**
-     * Validates an email address.
-     *
-     * @param string $email The email address to validate.
-     * @return bool True if the email is valid, false otherwise.
-     */
-    public function isValidEmail($email) {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-    }
+            if (empty($this->message)) {
+                throw new \InvalidArgumentException("Email message body is missing.");
+            }
 
-    /**
-     * Sends the email using PHP's built-in mail() function.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function send() {
-        // Basic validation for 'to' address
-        if (empty($this->to)) {
-            error_log("SimpleEmail Error: Recipient 'to' address is empty.");
+            if (empty($this->headers)) {
+                throw new \InvalidArgumentException("Headers are missing. A From header is required.");
+            }
+
+            $body = $this->buildMessageBody();
+            $headers = $this->buildHeaders();
+
+            $success = mail($this->to, $this->subject, $body, $headers, $this->parameters);
+
+            if (!$success) {
+                throw new \RuntimeException("mail() function failed.");
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            error_log("[SimpleEmail Error] " . $e->getMessage());
             return false;
         }
-
-        // You might want more robust validation for multiple recipients here
-        // For simplicity, we'll just check if the first one is valid if it's a comma-separated list
-        $recipients = explode(',', $this->to);
-        if (!empty($recipients) && !$this->isValidEmail(trim($recipients[0]))) {
-            error_log("SimpleEmail Error: Invalid recipient email address: " . trim($recipients[0]));
-            return false;
-        }
-
-        // Attempt to send the email
-        // The mail() function returns true on success, false on failure.
-        // However, it does not indicate if the email was actually delivered.
-        // Delivery status depends on the mail server configuration.
-        $success = mail($this->to, $this->subject, $this->message, $this->headers, $this->parameters);
-
-        if (!$success) {
-            error_log("SimpleEmail Error: Failed to send email to " . $this->to);
-        }
-
-        return $success;
     }
 }
 ?>
