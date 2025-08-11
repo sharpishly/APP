@@ -47,9 +47,6 @@ jobs:
             # Git pull master repository and submodules
             git submodule update --init --recursive
 
-            # Start dev branch
-            # End dev branch
-
             # Allow acces through firewall
             sudo ufw allow 80
             sudo ufw allow 443
