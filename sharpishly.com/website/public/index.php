@@ -46,7 +46,7 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">Software Development</h3>
                 <p class="text-gray-600 leading-relaxed">
-                    Sharpihly goal is to make AI accessible to everyone.
+                    Sharpishly goal is to make AI accessible to everyone.
                 </p>
             </div>
             
