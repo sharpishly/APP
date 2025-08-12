@@ -1,30 +1,30 @@
 ### READ ME ###
 
 # Instructions
+- See installation instructions below
 
-# Clone with Submodules
 
-The easiest way is to use the --recurse-submodules flag when cloning. This command handles everything in one go.
+# Project Features
+- Sharpishly [live](https://sharpishly.com)
+- Sharpishly [dev](https://dev.sharpishly.com)
+- Sharpishly Docs : [Docs](/var/www/sharpishly_app/docs/html/index.html)
+- Project Management : [Jira](https://sharpishly-project-management.atlassian.net/jira/software/projects/CRM/boards/1)
+- Docker containers
+- GitHub CI/CD [Workflow](https://github.com/sharpishly/APP/actions)
+- Python Project : [Docs](/var/www/sharpishly_app/python_project/docs/html/index.html)
+- Python MVC : [Python MVC](https://bitbucket.org/don_dev/php-mini-framework/src/master/)
 
-```
-git clone --recurse-submodules git@github.com:sharpishly/app.git
+# How to use website
 
-```
+- Navigation and site map
 
-# Git pull
 
-```
-git pull origin master
 
-```
-# Start Docker
+## Project structure📂:
 
-```
+### Sharpishly/
 
-docker-compose down
-docker-compose up -d
-
-```
+├── Assets            # Textures for game
 
 # Install Docker if not already installed
 ```
@@ -70,33 +70,38 @@ curl http://localhost:2000
 ```
 
 # Python Project
+-[Standalone](http://167.99.92.156:8000/)
+
+## Installation
+
+# Requirements
+- PHP
+- MySQL
+- Nginx
+- Linux
+- pip3 install git-filter-repo
+
+# Clone with Submodules
+
+The easiest way is to use the --recurse-submodules flag when cloning. This command handles everything in one go.
 
 ```
-http://167.99.92.156:8000/
-
-```
-
-# Project Features
-
-* Sharpishly Docs : [Docs](/var/www/sharpishly_app/docs/html/index.html)
-* Project Management : [Jira](https://sharpishly-project-management.atlassian.net/jira/software/projects/CRM/boards/1)
-* Docker containers
-* GitHub Continous Delivery
-* GitHub Continous Integration
-* CertBot
-* Nginx
-* MySQL
-* Linux
-* Bash
-* Python Project : /var/www/sharpishly_app/python_project/docs/html/index.html
-* Python MVC : https://bitbucket.org/don_dev/php-mini-framework/src/master/
-* PHP
-* pip3 install git-filter-repo
-
-# How to use website
+git clone --recurse-submodules git@github.com:sharpishly/app.git
 
 ```
 
-* Navigation and site map
+# Git pull
 
 ```
+git pull origin master
+
+```
+# Start Docker
+
+```
+
+docker-compose down
+docker-compose up -d
+
+```
+
