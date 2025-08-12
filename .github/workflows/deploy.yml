@@ -45,7 +45,7 @@ jobs:
             git pull origin master
             cd ..
 
-            cd dev.sharpishly
+            cd dev.sharpishly.com
             # or main, depending on the branch
             git stash
             git checkout master
