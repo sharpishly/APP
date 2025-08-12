@@ -49,7 +49,7 @@ jobs:
             # or main, depending on the branch
             git stash
             git checkout master
-            git pull origin master
+            git pull
             cd ..
 
             # Git pull master repository and submodules
