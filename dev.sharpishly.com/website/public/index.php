@@ -1,6 +1,6 @@
 <?php
 
-echo $dir = '/var/www/html/sharpishly/dev.sharpishly.com/website';
+$dir = dirname(dirname(__FILE__));
 
 require_once $dir . '/env.php';
 
