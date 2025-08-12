@@ -40,6 +40,14 @@ jobs:
             # Move into submodule folder and pull latest changes
             cd python_project
             # or main, depending on the branch
+            git stash
+            git checkout master
+            git pull origin master
+            cd ..
+
+            cd dev.sharpishly
+            # or main, depending on the branch
+            git stash
             git checkout master
             git pull origin master
             cd ..
