@@ -1,5 +1,7 @@
 <?php
 
+echo __FILE__;
+
 $dir = dirname(dirname(__FILE__));
 
 require_once $dir . '/env.php';
