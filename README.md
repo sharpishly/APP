@@ -9,22 +9,58 @@
 - Sharpishly [dev](https://dev.sharpishly.com)
 - Sharpishly Docs : [Docs](/var/www/sharpishly_app/docs/html/index.html)
 - Project Management : [Jira](https://sharpishly-project-management.atlassian.net/jira/software/projects/CRM/boards/1)
+- GitHub Project [Project Management](https://github.com/users/sharpishly/projects/1/views/1?system_template=team_planning)
 - Docker containers
 - GitHub CI/CD [Workflow](https://github.com/sharpishly/APP/actions)
 - Python Project : [Docs](/var/www/sharpishly_app/python_project/docs/html/index.html)
 - Python MVC : [Python MVC](https://bitbucket.org/don_dev/php-mini-framework/src/master/)
 
 # How to use website
-
 - Navigation and site map
-
-
 
 ## Project structure📂:
 
 ### Sharpishly/
 
-├── Assets            # Textures for game
+├── Node Project    # Front End
+├── Project Project    # Standalone
+
+
+# Python Project
+-[Standalone](http://167.99.92.156:8000/)
+
+## Installation
+
+# Requirements
+- PHP
+- MySQL
+- Nginx
+- Linux
+- pip3 install git-filter-repo
+
+# Clone with Submodules
+
+The easiest way is to use the --recurse-submodules flag when cloning. This command handles everything in one go.
+
+```
+git clone --recurse-submodules git@github.com:sharpishly/app.git
+
+```
+
+# Git pull
+
+```
+git pull origin master
+
+```
+# Start Docker
+
+```
+
+docker-compose down
+docker-compose up -d
+
+```
 
 # Install Docker if not already installed
 ```
@@ -66,42 +102,6 @@ curl http://localhost
 curl http://localhost:8080
 curl http://localhost:1000
 curl http://localhost:2000
-
-```
-
-# Python Project
--[Standalone](http://167.99.92.156:8000/)
-
-## Installation
-
-# Requirements
-- PHP
-- MySQL
-- Nginx
-- Linux
-- pip3 install git-filter-repo
-
-# Clone with Submodules
-
-The easiest way is to use the --recurse-submodules flag when cloning. This command handles everything in one go.
-
-```
-git clone --recurse-submodules git@github.com:sharpishly/app.git
-
-```
-
-# Git pull
-
-```
-git pull origin master
-
-```
-# Start Docker
-
-```
-
-docker-compose down
-docker-compose up -d
 
 ```
 
