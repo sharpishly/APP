@@ -78,7 +78,7 @@ http://167.99.92.156:8000/
 
 # Project Features
 
-* Sharpishly Docs : /var/www/sharpishly_app/docs/html/index.html
+* Sharpishly Docs : [Docs](/var/www/sharpishly_app/docs/html/index.html)
 * Project Management : [Jira](https://sharpishly-project-management.atlassian.net/jira/software/projects/CRM/boards/1)
 * Docker containers
 * GitHub Continous Delivery
