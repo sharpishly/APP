@@ -38,7 +38,7 @@ services:
     container_name: php_fpm
     volumes:
       - /var/www/app/sharpishly.com/website/public:/var/www/html/sharpishly
-      - /var/www/app/dev.sharpishly.com/website/public:/var/www/html/dev_sharpishly
+      - /var/www/app/dev.sharpishly.com:/var/www/html/dev_sharpishly
     networks:
       - sharpishly-network
     healthcheck:
