@@ -1,4 +1,3 @@
-version: '3.8'  # Added version for clarity and compatibility
 services:
   sharpishly:
     image: nginx:latest
