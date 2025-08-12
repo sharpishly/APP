@@ -4,7 +4,7 @@ services:
     container_name: sharpishly_prod
     volumes:
       - /var/www/app/sharpishly.com/website/public:/var/www/html/sharpishly
-      - /var/www/app/dev.sharpishly.com/website/public:/var/www/html/dev_sharpishly
+      - /var/www/app/dev.sharpishly.com/website/public:/var/www/html/sharpishly/dev.sharpishly.com/
       - /var/www/app/nginx/sharpishly.conf:/etc/nginx/conf.d/sharpishly.conf
       - /var/www/app/nginx/dev_sharpishly.conf:/etc/nginx/conf.d/dev_sharpishly.conf
       - /etc/letsencrypt:/etc/letsencrypt
