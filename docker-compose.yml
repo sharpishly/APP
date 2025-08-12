@@ -1,3 +1,4 @@
+version: '3.8'  # Added version for clarity and compatibility
 services:
   sharpishly:
     image: nginx:latest
@@ -26,11 +27,11 @@ services:
       - db
     command: >
       /bin/sh -c "
-          chmod -R 755 /var/www/html/sharpishly &&
-          chmod -R 755 /var/www/html/dev_sharpishly &&
-          chown -R www-data:www-data /var/www/html/sharpishly &&
-          chown -R www-data:www-data /var/www/html/dev_sharpishly &&
-          nginx -g 'daemon off;'"
+        chmod -R 755 /var/www/html/sharpishly &&
+        chmod -R 755 /var/www/html/dev_sharpishly &&
+        chown -R www-data:www-data /var/www/html/sharpishly &&
+        chown -R www-data:www-data /var/www/html/dev_sharpishly &&
+        nginx -g 'daemon off;'"
   php_fpm:
     build:
       context: .
@@ -39,6 +40,14 @@ services:
     volumes:
       - /var/www/app/sharpishly.com/website/public:/var/www/html/sharpishly
       - /var/www/app/dev.sharpishly.com:/var/www/html/dev_sharpishly
+    env_file:
+      - .env
+    # Added environment variables to explicitly pass DB credentials to PHP
+    environment:
+      - DB_HOST=db  # Ensure DB_HOST is set to the MySQL service name
+      - DB_USER=${MYSQL_USER}  # Use the same MySQL user as defined in db service
+      - DB_PASSWORD=${MYSQL_PASSWORD}  # Use the same MySQL password
+      - DB_NAME=${MYSQL_DATABASE}  # Use the same database name
     networks:
       - sharpishly-network
     healthcheck:
@@ -46,8 +55,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    # Modified depends_on to wait for db service to be healthy
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # Ensures MySQL is fully initialized before PHP starts
   python_app:
     build:
       context: ./python_project
@@ -69,10 +80,12 @@ services:
     ports:
       - "3306:3306"
     environment:
-      DB_NAME: ${MYSQL_DATABASE}
-      DB_USER: ${MYSQL_USER}
-      DB_PASSWORD: ${MYSQL_PASSWORD}
-      DB_HOST: db 
+      # Modified environment variables to use standard MySQL variables
+      - MYSQL_DATABASE=${MYSQL_DATABASE}  # Database name
+      - MYSQL_USER=${MYSQL_USER}  # MySQL user
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}  # MySQL user password
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # Added root password for healthcheck
+      # Removed DB_HOST and DB_NAME as they are not needed for MySQL initialization
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql/logs:/var/log/mysql
