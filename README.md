@@ -29,8 +29,16 @@
 # Python Project
 -[Standalone](http://167.99.92.156:8000/)
 
+## Intergrations
+
 # Jira 
 [Repository Access](https://github.com/settings/installations/80591577)
+
+# ZenHub 
+[]()
+
+# Canny 
+[]()
 
 ## Installation
 
