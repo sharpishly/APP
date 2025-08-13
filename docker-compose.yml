@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   sharpishly:
     image: nginx:latest
@@ -39,14 +40,12 @@ services:
     volumes:
       - /var/www/app/sharpishly.com/website/public:/var/www/html/sharpishly
       - /var/www/app/dev.sharpishly.com:/var/www/html/dev_sharpishly
-    env_file:
-      - .env
-    # Added environment variables to explicitly pass DB credentials to PHP
+    # Removed env_file to avoid potential conflicts with explicit environment variables
     environment:
-      - DB_HOST=db  # Ensure DB_HOST is set to the MySQL service name
-      - DB_USER=${MYSQL_USER}  # Use the same MySQL user as defined in db service
-      - DB_PASSWORD=${MYSQL_PASSWORD}  # Use the same MySQL password
-      - DB_NAME=${MYSQL_DATABASE}  # Use the same database name
+      - DB_HOST=db # Set to MySQL service name for network resolution
+      - DB_USER=sharpishly_user # Hardcoded to match db service credentials
+      - DB_PASSWORD=Addy@789xx$ # Hardcoded to match db service credentials
+      - DB_NAME=sharpishly_db # Hardcoded to match db service credentials
     networks:
       - sharpishly-network
     healthcheck:
@@ -54,10 +53,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    # Modified depends_on to wait for db service to be healthy
     depends_on:
       db:
-        condition: service_healthy  # Ensures MySQL is fully initialized before PHP starts
+        condition: service_healthy # Ensures PHP starts after MySQL is fully initialized
   python_app:
     build:
       context: ./python_project
@@ -76,27 +74,27 @@ services:
       - db
   db:
     image: mysql:8.0
+    container_name: app-db-1 # Explicitly set to match running container
     ports:
       - "3306:3306"
     environment:
-      # Modified environment variables to use standard MySQL variables
-      - MYSQL_DATABASE=${MYSQL_DATABASE}  # Database name
-      - MYSQL_USER=${MYSQL_USER}  # MySQL user
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}  # MySQL user password
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}  # Added root password for healthcheck
-      # Removed DB_HOST and DB_NAME as they are not needed for MySQL initialization
+      - MYSQL_DATABASE=sharpishly_db # Hardcoded database name
+      - MYSQL_USER=sharpishly_user # Hardcoded MySQL user
+      - MYSQL_PASSWORD=Addy@789xx$ # Hardcoded MySQL user password
+      - MYSQL_ROOT_PASSWORD=Addy@789xx$ # Hardcoded root password for healthcheck
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./mysql/logs:/var/log/mysql
+      - mysql_data:/var/lib/mysql # Persistent volume for MySQL data
+      - ./mysql/logs:/var/log/mysql # Logs for debugging
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pAddy@789xx$"] # Updated to use hardcoded root password
       interval: 5s
       timeout: 5s
       retries: 3
     networks:
       - sharpishly-network
+    command: mysqld --skip-grant-tables --skip-networking # Temporary safe mode to reset root password
 networks:
   sharpishly-network:
     driver: bridge
 volumes:
-  mysql_data:
+  mysql_data: # Volume for MySQL data persistence
