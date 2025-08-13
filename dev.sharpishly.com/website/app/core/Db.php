@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Core;
-
 use PDO;
 use PDOException;
 
 class Db {
-
     public $config;
     public $result;
     public $wp;
@@ -67,22 +64,49 @@ class Db {
         return $result;
     }
 
+    /**
+     * Establishes a PDO connection to the MySQL database with retry logic and SSL disabled.
+     * Retries up to 5 times with a 2-second delay to handle transient connection issues.
+     * Disables SSL verification to bypass self-signed certificate errors.
+     *
+     * @return PDO The established PDO connection object.
+     * @throws \Exception If connection fails after maximum retries.
+     */
     private function connect() {
         if ($this->pdo === null) {
-            extract($this->credentials);
-            try {
-                $this->pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-                $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); //set default fetch mode
-            } catch (PDOException $e) {
-                throw new \Exception("Connection failed: " . $e->getMessage()); //custom error message
+            extract($this->credentials); // Extract DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
+            $maxRetries = 5; // Maximum number of connection attempts
+            $retryDelay = 2; // Delay between retries in seconds
+            $attempt = 0;
+
+            while ($attempt < $maxRetries) {
+                try {
+                    // Initialize PDO with SSL verification disabled to avoid self-signed certificate errors
+                    $this->pdo = new PDO(
+                        "mysql:host=$servername;dbname=$dbname",
+                        $username,
+                        $password,
+                        [PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false]
+                    );
+                    $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                    error_log("Database connection successful");
+                    return $this->pdo;
+                } catch (PDOException $e) {
+                    $attempt++;
+                    if ($attempt === $maxRetries) {
+                        throw new \Exception("Connection failed after $maxRetries attempts: " . $e->getMessage());
+                    }
+                    error_log("Connection attempt $attempt failed: " . $e->getMessage() . ". Retrying in $retryDelay seconds...");
+                    sleep($retryDelay);
+                }
             }
         }
         return $this->pdo;
     }
 
     public function conn($data, $options = false) {
-        $conn = $this->connect(); //use the existing connection
+        $conn = $this->connect();
         try {
             $stmt = $conn->prepare($data['sql']);
             $stmt->execute();
@@ -343,10 +367,10 @@ class Db {
         $data = $this->field_names($data, $conditions);
         $data = $this->find_sum($data, $conditions);
         $data = $this->subquery_count($data, $conditions);
-        $data = $this->find_grand_total($data, $conditions); // New call for grand_total
+        $data = $this->find_grand_total($data, $conditions);
         $data = $this->describe_statement($conditions, $data);
         $data = $this->joins($data, $conditions);
-        $data = $this->joins_many($data, $conditions); // Added for joins_many
+        $data = $this->joins_many($data, $conditions);
         $data = $this->where($data, $conditions);
         $data = $this->wheres($data, $conditions);
         $data = $this->like($data, $conditions);
@@ -360,11 +384,9 @@ class Db {
     public function subquery_count($data, $conditions) {
         $key = __FUNCTION__;
         if (isset($conditions[$key])) {
-            // Re-use wheres for subquery consistency
-            $temp_data_for_wheres = ['sql' => '']; // Initialize for wheres
+            $temp_data_for_wheres = ['sql' => ''];
             $temp_data_for_wheres = $this->wheres($temp_data_for_wheres, $conditions);
             $wheres = $temp_data_for_wheres['wheres'] ?? '';
-
             $tbl = $conditions['table'];
             $col = $conditions[$key]['col'];
             $name = $conditions[$key]['name'];
@@ -379,11 +401,9 @@ class Db {
 
     public function find_sum($data, $conditions) {
         if (isset($conditions['sum'])) {
-            // Re-use wheres for subquery consistency
-            $temp_data_for_wheres = ['sql' => '']; // Initialize for wheres
+            $temp_data_for_wheres = ['sql' => ''];
             $temp_data_for_wheres = $this->wheres($temp_data_for_wheres, $conditions);
             $wheres = $temp_data_for_wheres['wheres'] ?? '';
-
             $tbl = $conditions['table'];
             $col = $conditions['sum']['col'];
             $name = $conditions['sum']['name'];
@@ -403,29 +423,19 @@ class Db {
      *
      * @param array $data The current data array containing the SQL query.
      * @param array $conditions An array containing the conditions, including 'grand_total' configuration.
-     * Example:
-     * 'grand_total' => [
-     * 'name' => 'cart_grand_total', // The alias for the grand total column
-     * 'price_col' => 'price',
-     * 'quantity_col' => 'quantity'
-     * ]
      * @return array The updated data array with the grand total subquery.
      */
     public function find_grand_total($data, $conditions) {
         $key = __FUNCTION__;
         if (isset($conditions[$key])) {
             $grandTotalConfig = $conditions[$key];
-
-            // Re-use wheres for subquery consistency
-            $temp_data_for_wheres = ['sql' => '']; // Initialize for wheres
+            $temp_data_for_wheres = ['sql' => ''];
             $temp_data_for_wheres = $this->wheres($temp_data_for_wheres, $conditions);
             $wheres = $temp_data_for_wheres['wheres'] ?? '';
-
             $tbl = $conditions['table'];
             $priceCol = $grandTotalConfig['price_col'];
             $quantityCol = $grandTotalConfig['quantity_col'];
             $name = $grandTotalConfig['name'];
-
             $sql = "SELECT SUM(" . $tbl . ".`" . $priceCol . "` * " . $tbl . ".`" . $quantityCol . "`) AS " . $name
                 . " FROM " . $tbl
                 . " " . $wheres;
@@ -434,7 +444,6 @@ class Db {
         }
         return $data;
     }
-
 
     public function thecount($sql, $conditions) {
         $e = 'count';
@@ -497,14 +506,7 @@ class Db {
      *
      * @param array $data The current data array containing the SQL query.
      * @param array $conditions An array containing join conditions.
-     * The 'joins_many' key should contain an array of join definitions, where each
-     * definition is an associative array with:
-     * - 'type': (string) The type of JOIN (e.g., 'INNER', 'LEFT', 'RIGHT').
-     * - 'table': (string) The table to join.
-     * - 'on': (array) An associative array defining the join condition:
-     * - 'this_table_col': (string) The column from the main table.
-     * - 'other_table_col': (string) The column from the joined table.
-     * @return array The updated data array with the constructed join clauses appended to the SQL query.
+     * @return array The updated data array with the constructed join clauses.
      */
     public function joins_many($data, $conditions) {
         if (isset($conditions[__FUNCTION__])) {
@@ -512,9 +514,7 @@ class Db {
                 $joinType = isset($join['type']) ? strtoupper($join['type']) : 'INNER';
                 $joinedTable = $join['table'];
                 $onConditions = $join['on'];
-
                 $data['sql'] .= " " . $joinType . " JOIN `" . $joinedTable . "` ON ";
-
                 $onClauses = [];
                 foreach ($onConditions as $thisTableCol => $otherTableCol) {
                     $onClauses[] = $conditions['table'] . ".`" . $thisTableCol . "` = `" . $joinedTable . "`.`" . $otherTableCol . "`";
@@ -618,7 +618,7 @@ class Db {
 
     public function wheres($data, $conditions) {
         $e = __FUNCTION__;
-        $where = ''; // Initialize where
+        $where = '';
         if (isset($conditions[$e])) {
             $conditions = $this->or_and($data, $conditions);
             $it = $conditions[$e];
@@ -637,7 +637,7 @@ class Db {
             if (isset($conditions['or'])) {
                 $data['sql'] .= $conditions['or'];
             }
-            $data[__FUNCTION__] = $where; // Store the generated where clause
+            $data[__FUNCTION__] = $where;
         }
         return $data;
     }
@@ -700,7 +700,6 @@ class Db {
                     $sql .= ",";
                 }
             }
-            // Add the calculated 'total' column here
             if (isset($conditions['calculated_columns']['total'])) {
                 $totalColumns = $conditions['calculated_columns']['total'];
                 $sql .= ", (" . $conditions['table'] . ".`" . $totalColumns['price_col'] . "` * " . $conditions['table'] . ".`" . $totalColumns['quantity_col'] . "`) AS total";
@@ -709,15 +708,15 @@ class Db {
             $sql = $this->joinsfields($sql, $conditions);
             $sql = $this->replicate($sql, $conditions);
             $sql = $this->find_sum_set($sql, $data);
-            $sql = $this->find_subquery_count_set($sql, $data); // Renamed for consistency
-            $sql = $this->find_grand_total_set($sql, $data); // New call to add grand_total to the main SQL
+            $sql = $this->find_subquery_count_set($sql, $data);
+            $sql = $this->find_grand_total_set($sql, $data);
             $sql .= "FROM " . $conditions['table'];
             $data['sql'] = $sql;
         }
         return $data;
     }
 
-    public function find_subquery_count_set($sql, $data) { // Renamed from find_subquery_count
+    public function find_subquery_count_set($sql, $data) {
         $el = 'subquery_count';
         if (isset($data[$el])) {
             $sql .= $data[$el];
@@ -862,6 +861,7 @@ class Db {
             return false;
         }
     }
+
     /**
      * Checks if the database connection is in a transaction.
      *
