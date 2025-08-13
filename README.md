@@ -34,11 +34,14 @@
 # Jira 
 [Repository Access](https://github.com/settings/installations/80591577)
 
+# Jira Sharpishly Board
+[Board](https://sharpishly.atlassian.net/jira/software/projects/SHAR/boards/1)
+
 # ZenHub 
 []()
 
 # Canny 
-[]()
+[Profile](https://sharpishly.canny.io/admin/settings/boards/feature-requests/general)
 
 ## Installation
 

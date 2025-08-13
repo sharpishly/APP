@@ -30,7 +30,11 @@
 header('Content-Type: text/plain');
 
 // Load env.php to ensure credentials are defined
-require_once __DIR__ . '/env.php';
+// require_once __DIR__ . '/env.php';
+
+echo $dir = dirname(dirname(__FILE__));
+
+require_once $dir . '/env.php';
 
 // Output the database credentials
 echo "Database Credentials:\n";
