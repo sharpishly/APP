@@ -29,6 +29,9 @@
 # Python Project
 -[Standalone](http://167.99.92.156:8000/)
 
+# Python MVC
+-[Standalone](http://167.99.92.156:3000/)
+
 ## Intergrations
 
 # Jira 
@@ -38,10 +41,13 @@
 [Board](https://sharpishly.atlassian.net/jira/software/projects/SHAR/boards/1)
 
 # ZenHub 
-[]()
+[Board](https://app.zenhub.com/workspaces/sharpishly-689ba0843d9fb1000f1e1aa5/board)
 
 # Canny 
 [Profile](https://sharpishly.canny.io/admin/settings/boards/feature-requests/general)
+
+# Marker.io
+[Board](https://app.marker.io/projects/active?owner=1)
 
 ## Installation
 
