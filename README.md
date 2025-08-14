@@ -49,6 +49,9 @@
 # Marker.io
 [Board](https://app.marker.io/projects/active?owner=1)
 
+# Sentry (Metrics)
+[Account](https://sharpishly.sentry.io/issues/)
+
 ## Installation
 
 # Requirements
