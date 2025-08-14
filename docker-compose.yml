@@ -32,6 +32,7 @@ services:
         chown -R www-data:www-data /var/www/html/sharpishly &&
         chown -R www-data:www-data /var/www/html/dev_sharpishly &&
         nginx -g 'daemon off;'"
+
   php_fpm:
     build:
       context: .
@@ -40,12 +41,11 @@ services:
     volumes:
       - /var/www/app/sharpishly.com/website/public:/var/www/html/sharpishly
       - /var/www/app/dev.sharpishly.com:/var/www/html/dev_sharpishly
-    # Removed env_file to avoid potential conflicts with explicit environment variables
     environment:
-      - DB_HOST=db # Set to MySQL service name for network resolution
-      - DB_USER=sharpishly_user # Hardcoded to match db service credentials
-      - DB_PASSWORD=Addy@789xx$ # Hardcoded to match db service credentials
-      - DB_NAME=sharpishly_db # Hardcoded to match db service credentials
+      - DB_HOST=db
+      - DB_USER=sharpishly_user
+      - DB_PASSWORD=Addy@789xx$
+      - DB_NAME=sharpishly_db
     networks:
       - sharpishly-network
     healthcheck:
@@ -55,7 +55,8 @@ services:
       retries: 3
     depends_on:
       db:
-        condition: service_healthy # Ensures PHP starts after MySQL is fully initialized
+        condition: service_healthy
+
   python_app:
     build:
       context: ./python_project
@@ -72,29 +73,36 @@ services:
       retries: 3
     depends_on:
       - db
+
   db:
     image: mysql:8.0
-    container_name: app-db-1 # Explicitly set to match running container
+    container_name: app-db-1
     ports:
-      - "3306:3306"
+      - "3306:3306"  # Map container port to host port
     environment:
-      - MYSQL_DATABASE=sharpishly_db # Hardcoded database name
-      - MYSQL_USER=sharpishly_user # Hardcoded MySQL user
-      - MYSQL_PASSWORD=Addy@789xx$ # Hardcoded MySQL user password
-      - MYSQL_ROOT_PASSWORD=Addy@789xx$ # Hardcoded root password for healthcheck
+      - MYSQL_DATABASE=sharpishly_db
+      - MYSQL_USER=sharpishly_user
+      - MYSQL_PASSWORD=Addy@789xx$
+      - MYSQL_ROOT_PASSWORD=Addy@789xx$
     volumes:
-      - mysql_data:/var/lib/mysql # Persistent volume for MySQL data
-      - ./mysql/logs:/var/log/mysql # Logs for debugging
+      - mysql_data:/var/lib/mysql
+      - ./mysql/logs:/var/log/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pAddy@789xx$"] # Updated to use hardcoded root password
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pAddy@789xx$"]
       interval: 5s
       timeout: 5s
       retries: 3
     networks:
       - sharpishly-network
-    command: mysqld --skip-grant-tables --skip-networking # Temporary safe mode to reset root password
+    # Removed --skip-grant-tables and --skip-networking so MySQL can accept TCP connections
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --port=3306
+      --bind-address=0.0.0.0
+
 networks:
   sharpishly-network:
     driver: bridge
+
 volumes:
-  mysql_data: # Volume for MySQL data persistence
+  mysql_data:
