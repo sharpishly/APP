@@ -31,6 +31,7 @@
 
 # Python MVC
 -[Standalone](http://167.99.92.156:3000/)
+-[home](http://167.99.92.156:3000/home/index)
 
 ## Intergrations
 
