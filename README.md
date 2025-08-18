@@ -121,11 +121,44 @@ docker logs node_nginx
 # Connectivity
 
 ```
-
 curl http://localhost
-curl http://localhost:8080
+```
+- Not used
+```
 curl http://localhost:1000
+```
+- Not used
+```
 curl http://localhost:2000
+```
 
+- Python MVC
+```
+curl http://localhost:3000
+```
+
+- Not used
+```
+curl http://localhost:4000
+```
+
+- Not used
+```
+curl http://localhost:5000
+```
+
+- Not used
+```
+curl http://localhost:6000
+```
+
+- Not used
+```
+curl http://localhost:7000
+```
+
+- Python Standalone
+```
+curl http://localhost:8080
 ```
 
