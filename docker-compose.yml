@@ -8,6 +8,8 @@ services:
       - /var/www/app/dev.sharpishly.com:/var/www/html/dev_sharpishly
       - /var/www/app/nginx/sharpishly.conf:/etc/nginx/conf.d/sharpishly.conf
       - /var/www/app/nginx/dev_sharpishly.conf:/etc/nginx/conf.d/dev_sharpishly.conf
+      - /var/www/python_mvc:/var/www/html/python_mvc
+      - /var/www/python_mvc/nginx/conf.d/default.conf:/etc/nginx/conf.d/python_mvc.conf
       - /etc/letsencrypt:/etc/letsencrypt
     ports:
       - "80:80"
@@ -29,8 +31,10 @@ services:
       /bin/sh -c "
         chmod -R 755 /var/www/html/sharpishly &&
         chmod -R 755 /var/www/html/dev_sharpishly &&
+        chmod -R 755 /var/www/html/python_mvc &&
         chown -R www-data:www-data /var/www/html/sharpishly &&
         chown -R www-data:www-data /var/www/html/dev_sharpishly &&
+        chown -R www-data:www-data /var/www/html/python_mvc &&
         nginx -g 'daemon off;'"
 
   php_fpm:
@@ -62,12 +66,12 @@ services:
       context: ./python_project
       dockerfile: Dockerfile
     container_name: python_app
-    ports:
-      - "8000:8000"
+    expose:
+      - "3000"
     networks:
       - sharpishly-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -78,7 +82,7 @@ services:
     image: mysql:8.0
     container_name: app-db-1
     ports:
-      - "3306:3306"  # Map container port to host port
+      - "3306:3306"
     environment:
       - MYSQL_DATABASE=sharpishly_db
       - MYSQL_USER=sharpishly_user
@@ -94,7 +98,6 @@ services:
       retries: 3
     networks:
       - sharpishly-network
-    # Removed --skip-grant-tables and --skip-networking so MySQL can accept TCP connections
     command: >
       --default-authentication-plugin=mysql_native_password
       --port=3306

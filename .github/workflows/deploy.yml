@@ -24,7 +24,7 @@ jobs:
             # Navigate to the correct directory
 
             # Stop nginx on the host after reboot
-            sudo service nginx stop
+            #sudo service nginx stop
 
             # Master branch
             cd /var/www/app
