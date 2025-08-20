@@ -1,0 +1,108 @@
+version: '3.8'
+services:
+  sharpishly:
+    image: nginx:latest
+    container_name: sharpishly_prod
+    volumes:
+      - /var/www/app/sharpishly.com/website/public:/var/www/html/sharpishly
+      - /var/www/app/dev.sharpishly.com:/var/www/html/dev_sharpishly
+      - /var/www/app/nginx/sharpishly.conf:/etc/nginx/conf.d/sharpishly.conf
+      - /var/www/app/nginx/dev_sharpishly.conf:/etc/nginx/conf.d/dev_sharpishly.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_HOST=sharpishly.com
+    networks:
+      - sharpishly-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - php_fpm
+      - python_app
+      - db
+    command: >
+      /bin/sh -c "
+        chmod -R 755 /var/www/html/sharpishly &&
+        chmod -R 755 /var/www/html/dev_sharpishly &&
+        chown -R www-data:www-data /var/www/html/sharpishly &&
+        chown -R www-data:www-data /var/www/html/dev_sharpishly &&
+        nginx -g 'daemon off;'"
+
+  php_fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    container_name: php_fpm
+    volumes:
+      - /var/www/app/sharpishly.com/website/public:/var/www/html/sharpishly
+      - /var/www/app/dev.sharpishly.com:/var/www/html/dev_sharpishly
+    environment:
+      - DB_HOST=db
+      - DB_USER=sharpishly_user
+      - DB_PASSWORD=Addy@789xx$
+      - DB_NAME=sharpishly_db
+    networks:
+      - sharpishly-network
+    healthcheck:
+      test: ["CMD", "php-fpm", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      db:
+        condition: service_healthy
+
+  python_app:
+    build:
+      context: ./python_project
+      dockerfile: Dockerfile
+    container_name: python_app
+    ports:
+      - "8000:8000"
+    networks:
+      - sharpishly-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: app-db-1
+    ports:
+      - "3306:3306"  # Map container port to host port
+    environment:
+      - MYSQL_DATABASE=sharpishly_db
+      - MYSQL_USER=sharpishly_user
+      - MYSQL_PASSWORD=Addy@789xx$
+      - MYSQL_ROOT_PASSWORD=Addy@789xx$
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/logs:/var/log/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pAddy@789xx$"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    networks:
+      - sharpishly-network
+    # Removed --skip-grant-tables and --skip-networking so MySQL can accept TCP connections
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --port=3306
+      --bind-address=0.0.0.0
+
+networks:
+  sharpishly-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
